@@ -1,11 +1,10 @@
-
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
 
 const app = express();
 
-const PORT = 3000;
+const PORT = 8080;
 
 const allSavedNotes = require('./db/db.json');
 
@@ -19,24 +18,22 @@ app.get('/', (req, res) => res.sendFile(path.join(__dirname, './public/index.htm
 
 app.get('/notes', (req, res) => res.sendFile(path.join(__dirname, './public/notes.html')));
 
+// If no matching route is found default to home
 app.get('*', (req, res) => res.sendFile(path.join(__dirname, './public/index.html')));
 
 function createNote(body, notesArray) {
     const newNotes = body;
-    if (!Array.isArray(notesArray))
-        notesArray = [];
-    
-    if (notesArray.length === 0)
-        notesArray.push(0);
+
+    if (!Array.isArray(notesArray)) notesArray = [];
+
+    if (notesArray.length === 0) notesArray.push(0);
 
     body.id = notesArray[0];
     notesArray[0]++;
 
     notesArray.push(newNotes);
-    fs.writeFileSync(
-        path.join(__dirname, './db/db.json'),
-        JSON.stringify(notesArray, null, 2)
-    );
+
+    fs.writeFileSync(path.join(__dirname, './db/db.json'), JSON.stringify(notesArray, null, 2));
     return newNotes;
 }
 
@@ -46,15 +43,12 @@ app.post('/api/notes', (req, res) => {
 });
 
 function deleteNote(id, notesArray) {
-    for (let i = 0; i < notesArray.length; i++) {
-        let note = notesArray[i];
+    for (let i = 0; i < notesArray.length; i++){
+        let notes = notesArray[i];
 
-        if (note.id == id) {
-            notesArray.splice(i, 1);
-            fs.writeFileSync(
-                path.join(__dirname, './db/db.json'),
-                JSON.stringify(notesArray, null, 2)
-            );
+        if(notes.id == id) {
+            notesArray.splice(i,1);
+            fs.writeFileSync(path.join(__dirname, './db/db.json'), JSON.stringify(notesArray, null, 2));
 
             break;
         }
@@ -66,6 +60,4 @@ app.delete('/api/notes/:id', (req, res) => {
     res.json(true);
 });
 
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}!`);
-});
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
