@@ -44,8 +44,12 @@ function createNote(body, notesArray) {
 
     notesArray.push(newNotes);
 
-    fs.writeFileSync(path.join(__dirname, './db/db.json'), JSON.stringify(notesArray));
-    return newNotes;
+    let data = JSON.stringify(notesArray, null, 2);
+
+    fs.writeFile(path.join(__dirname, './db/db.json'), data, (err) =>{
+        if (err) throw err;
+        return newNotes;
+    });    
 }
 
 //post /api/notes should read the db.json file and return all saved notes as JSON
@@ -61,9 +65,13 @@ function deleteNote(id, notesArray) {
 
         if(notes.id == id) {
             notesArray.splice(i,1);
-            fs.writeFileSync(path.join(__dirname, './db/db.json'), JSON.stringify(notesArray));
 
-            break;
+            let data = JSON.stringify(notesArray, null, 2);
+            
+            fs.writeFile(path.join(__dirname, './db/db.json'), data, (err) => {
+                if (err) throw err;
+            });
+                break;
         }
     }
 }
