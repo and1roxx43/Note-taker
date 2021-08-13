@@ -22,4 +22,4 @@ THEN the new note the user has entered is saved and appears in the left-hand col
 __
 ### URL
 - GitHub: https://github.com/and1roxx43/Note-taker
-- Heroku: https://stark-island-10275.herokuapp.com/
+- Heroku: https://andrew-notetaker.herokuapp.com/
